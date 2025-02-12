@@ -85,16 +85,16 @@
     <script src="../../common/js/jquery.js"></script>
     <script>
       $(function() {
-        var selectList = $('.list').find('li');
+        var selectedList = $('.list').find('li');
         $('.select').change(function() {
           var targetVal = $(this).val();
-          function selectedLists() {
+          function selectList() {
             var targetList = $(this).data('category-type');
             targetList === targetVal && $(this).show();
           }
           return(
-            'all' === targetVal ? selectList.show() : selectList.hide(),
-            selectList.each(selectedLists)
+            'all' === targetVal ? selectedList.show() : selectedList.hide(),
+            selectedList.each(selectList)
           );
         });
       });
