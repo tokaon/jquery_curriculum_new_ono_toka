@@ -16,6 +16,72 @@
   <script src="../../common/js/jquery.js"></script>
   <script>
     // 回答はここに書いてね
+    let encountHtml =
+      `
+        <p class="name"></p>
+        <div>
+          <img class="img" src="" alt="">
+        </div>
+        <div>
+          <button class="btn" id="catch">捕まえる</button>
+          <button class="btn" data-js="reset">逃げる</button>
+        </div>
+      `
+      
+    let failHtml =
+      `
+        <p class="text">逃げられてしまった...</p>
+        <button class="btn mt" data-js="reset">戻る</button>
+      `
+
+    let doneHtml =
+      `
+        <p class="name">ゲットしました</p>
+        <div>
+          <img class="img" src="" alt="">
+        </div>
+        <button class="btn" data-js="reset">戻る</button>
+      `
+
+    $(function() {
+      let defaultHtml = $('.wrapper').clone(true);
+      function resetHtml() {
+        $(document).on('click', '.btn[data-js]', function() {
+          $('.wrapper').replaceWith(defaultHtml.clone());
+        })
+      };
+      $(document).on('click', '#catch', function() {
+        $.ajax({
+          url: 'https://pokeapi.co/api/v2/item/4',
+          method: 'GET',
+        }).done(function(res) {
+          var ballImg = res.sprites.default;
+          var selectTemplate = (Math.random() >0.5) ? doneHtml : failHtml;
+          $('.wrapper').html(selectTemplate);
+          $('.img').attr('src', ballImg);
+          resetHtml();
+        });
+      });
+      $(document).on('click', '.search-btn', function() {
+        var randomNumber = Math.floor(Math.random() * 151) + 1;
+        $.ajax({
+          url: `https://pokeapi.co/api/v2/pokemon/${randomNumber}`,
+          method: 'GET',
+        }).done(function(res) {
+          var imgUrl = res.sprites.front_default
+          $.ajax({
+            url: `https://pokeapi.co/api/v2/pokemon-species/${randomNumber}/`,
+            method: 'GET',
+          }).done(function(res) {
+            var imgName = res.names[0].name
+            $('.wrapper').html(encountHtml);
+            $('.name').html(imgName);
+            $('.img').attr('src', imgUrl);
+            resetHtml();
+          });
+        })
+      });
+    });
   </script>
 </body>
 </html>
