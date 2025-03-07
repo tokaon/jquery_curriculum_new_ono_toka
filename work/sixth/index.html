@@ -45,12 +45,13 @@
 
     $(function() {
       let defaultHtml = $('.wrapper').clone(true);
+      $(document).on('click', '.btn[data-js]', resetHtml);
+      $(document).on('click', '#catch', catchMonster);
+      $(document).on('click', '.search-btn', searchMonster);
       function resetHtml() {
-        $(document).on('click', '.btn[data-js]', function() {
-          $('.wrapper').replaceWith(defaultHtml.clone());
-        })
+        $('.wrapper').replaceWith(defaultHtml.clone());
       };
-      $(document).on('click', '#catch', function() {
+      function catchMonster() {
         $.ajax({
           url: 'https://pokeapi.co/api/v2/item/4',
           method: 'GET',
@@ -59,10 +60,9 @@
           var selectTemplate = (Math.random() >0.5) ? doneHtml : failHtml;
           $('.wrapper').html(selectTemplate);
           $('.img').attr('src', ballImg);
-          resetHtml();
         });
-      });
-      $(document).on('click', '.search-btn', function() {
+      };
+      function searchMonster() {
         var randomNumber = Math.floor(Math.random() * 151) + 1;
         $.ajax({
           url: `https://pokeapi.co/api/v2/pokemon/${randomNumber}`,
@@ -77,10 +77,9 @@
             $('.wrapper').html(encountHtml);
             $('.name').html(imgName);
             $('.img').attr('src', imgUrl);
-            resetHtml();
           });
-        })
-      });
+        });
+      };
     });
   </script>
 </body>
